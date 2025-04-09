@@ -1,135 +1,209 @@
+
 import java.util.UUID;
 
-public class Conta {
+public final class Conta {
 
-    // Classe Cliente como uma classe estática interna
+    /**
+     * Classe que representa um cliente associado a uma conta bancária.
+     */
     public static class Cliente {
 
-        private final String nome; // Nome do cliente
-        private boolean ativo; // Status do cliente (ativo ou inativo)
+        private String nome;
+        private boolean ativo;
 
-        // Construtor da classe Cliente
+        /**
+         * Construtor da classe Cliente.
+         *
+         * @param nome Nome do cliente.
+         */
         public Cliente(String nome) {
-            this.nome = nome; // Inicializa o nome do cliente
-            this.ativo = true; // Define o cliente como ativo por padrão
+            this.nome = nome;
+            this.ativo = true;
         }
 
-        // Retorna o nome do cliente
-        public String getName() {
+        /**
+         * Obtém o nome do cliente.
+         *
+         * @return Nome do cliente.
+         */
+        public String getNome() {
             return nome;
         }
 
-        // Retorna se o cliente está ativo
-        public boolean isAtivo() {
+        /**
+         * Define o nome do cliente.
+         *
+         * @param nome Nome do cliente.
+         */
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        /**
+         * Verifica se o cliente está ativo.
+         *
+         * @return {@code true} se o cliente estiver ativo, caso contrário
+         * {@code false}.
+         */
+        public boolean getAtivo() {
             return ativo;
         }
 
-        // Define o status ativo do cliente
+        /**
+         * Define o status ativo do cliente.
+         *
+         * @param ativo {@code true} para ativar o cliente, {@code false} para
+         * desativar.
+         */
         public void setAtivo(boolean ativo) {
             this.ativo = ativo;
         }
     }
 
-    public static void main(String[] args) {
-        
-    }
-    private final String numero; // Número da conta
-    private final String agencia; // Número da agência
-    private final Cliente cliente; // Cliente associado à conta
-    private double chequeEspecial; // Limite do cheque especial 
-    private double saldo; // Saldo da conta
+    private String numero;
+    private String agencia;
+    private Cliente cliente;
+    private double saldo;
 
-    // Construtor da classe Conta
+    /**
+     * Construtor da classe Conta.
+     *
+     * @param numero Número da conta.
+     * @param agencia Número da agência.
+     * @param cliente Cliente associado à conta.
+     */
     public Conta(String numero, String agencia, Cliente cliente) {
-        this.numero = numero; // Inicializa o número da conta
-        this.agencia = agencia; // Inicializa o número da agência
-        this.saldo = 450.0; // Define o saldo inicial padrão como 450.0
-        this.cliente = cliente; // Associa o cliente à conta
-        this.chequeEspecial = 1000; // Inicializa o cheque especial como 0.0
+        this.numero = numero;
+        this.agencia = agencia;
+        this.saldo = 450.0;
+        this.cliente = cliente;
     }
 
-    // Retorna o número da conta
+    /**
+     * Obtém o número da conta.
+     *
+     * @return Número da conta.
+     */
     public String getNumero() {
         return numero;
     }
 
-    // Retorna o número da agência
+    /**
+     * Define o número da conta.
+     *
+     * @param numero Número da conta.
+     */
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    /**
+     * Obtém o número da agência.
+     *
+     * @return Número da agência.
+     */
     public String getAgencia() {
         return agencia;
     }
 
-    // Retorna o saldo da conta
-    public double getSaldo() {
-        return saldo;
+    /**
+     * Define o número da agência.
+     *
+     * @param agencia Número da agência.
+     */
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
     }
 
-    // Retorna o cliente associado à conta
+    /**
+     * Obtém o cliente associado à conta.
+     *
+     * @return Cliente associado à conta.
+     */
     public Cliente getCliente() {
         return cliente;
     }
 
-    // Retorna o limite do cheque especial
-    public double getChequeEspecial() {
-        return chequeEspecial;
+    /**
+     * Define o cliente associado à conta.
+     *
+     * @param cliente Cliente associado à conta.
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    // Método para depositar dinheiro na conta
+    /**
+     * Obtém o saldo da conta.
+     *
+     * @return Saldo da conta.
+     */
+    public double getSaldo() {
+        return saldo;
+    }
+
+    /**
+     * Define o saldo da conta.
+     *
+     * @param saldo Saldo da conta.
+     */
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    private boolean validValor(double valor) {
+        return valor > 0;
+    }
+
+    private boolean hasSaldo(double valor) {
+        return saldo >= valor;
+    }
+
+    /**
+     * Deposita um valor na conta.
+     *
+     * @param valor Valor a ser depositado.
+     */
     public void depositar(double valor) {
-        if (valor > 0) {
-            saldo += valor; // Adiciona o valor ao saldo
-            System.out.println("Depósito de R$" + valor + " realizado com sucesso.");
-        } else {
+        if (!validValor(valor)) {
             System.out.println("Valor de depósito inválido.");
+            return;
         }
+
+        saldo += valor;
+        System.out.println("Depósito de R$" + valor + " realizado com sucesso.");
     }
 
-    // Método para sacar dinheiro da conta
-    public boolean sacar(double valor) {
-        double saldoDisponivel = saldo + chequeEspecial; // Saldo disponível inclui o cheque especial
-        if (valor > 0 && valor <= saldoDisponivel) {
-            saldo -= valor; // Subtrai o valor do saldo
-            System.out.println("Saque realizado com sucesso!");
-            if (saldo < 0) {
-                System.out.println("Você está utilizando o cheque especial.");
-            }
-            return true; // Saque realizado com sucesso
+    /**
+     * Realiza um saque na conta.
+     *
+     * @param valor Valor a ser sacado.
+     */
+    public void sacar(double valor) {
+        if (!validValor(valor)) {
+            System.out.println("Valor inválido para saque.");
+        } else if (!hasSaldo(valor)) {
+            System.out.println("Saldo insuficiente para saque.");
         } else {
-            System.out.println("Erro: Saldo insuficiente ou valor inválido."); // Mensagem de erro
-            return false; // Saque não realizado
+            saldo -= valor;
+            System.out.println("Saque de R$" + valor + " realizado com sucesso.");
         }
     }
 
-    // Método para depositar dinheiro na conta
+    /**
+     * Gera uma cobrança Pix com um valor especificado.
+     *
+     * @param valor Valor da cobrança Pix.
+     */
     public void pix(double valor) {
-    if (valor > 0) {
-        String chavePix = UUID.randomUUID().toString(); // Gera uma chave Pix aleatória
+        if (!validValor(valor)) {
+            System.out.println("Valor inválido para cobrança Pix.");
+            return;
+        }
+
+        String chavePix = UUID.randomUUID().toString();
         System.out.println("Cobrança Pix gerada com sucesso!");
         System.out.println("Valor: R$" + valor);
         System.out.println("Chave Pix: " + chavePix);
-    } else {
-        System.out.println("Valor inválido para cobrança Pix.");
-    }
-    }
-
-
-        
-    // Método para pagar um boleto
-    public void pagarBoleto(double valor, String codigoBoleto) {
-        double saldoDisponivel = saldo + chequeEspecial; // Saldo disponível inclui o cheque especial
-        if (valor <= 0) {
-            System.out.println("Erro: O valor do boleto deve ser maior que zero.");
-            return;
-        }
-    
-        if (valor <= saldoDisponivel) {
-            saldo -= valor; // Subtrai o valor do saldo
-            System.out.println("Pagamento do boleto " + codigoBoleto + " realizado com sucesso.");
-            System.out.println("Novo saldo: R$" + saldo);
-            if (saldo < 0) {
-                System.out.println("Você está utilizando o cheque especial.");
-            }
-        } else {
-            System.out.println("Erro: Saldo insuficiente para pagar o boleto.");
-        }
     }
 }
